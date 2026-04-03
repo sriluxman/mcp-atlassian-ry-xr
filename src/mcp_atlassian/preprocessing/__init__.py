@@ -6,10 +6,12 @@ from .base import BasePreprocessor
 from .base import BasePreprocessor as TextPreprocessor
 from .confluence import ConfluencePreprocessor
 from .jira import JiraPreprocessor
+from .requirement_yogi import RequirementYogiPreprocessor
 
 __all__ = [
     "BasePreprocessor",
     "ConfluencePreprocessor",
     "JiraPreprocessor",
+    "RequirementYogiPreprocessor",
     "TextPreprocessor",  # For backwards compatibility
 ]
