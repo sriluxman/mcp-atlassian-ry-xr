@@ -48,6 +48,7 @@ from .confluence import confluence_mcp
 from .context import MainAppContext
 from .jira import jira_mcp
 from .oauth_proxy import HardenedOAuthProxy, parse_env_list
+from .requirement_yogi import requirement_yogi_mcp
 
 logger = logging.getLogger("mcp-atlassian.server.main")
 
@@ -817,6 +818,7 @@ main_mcp = AtlassianMCP(
 )
 main_mcp.mount(jira_mcp, "jira")
 main_mcp.mount(confluence_mcp, "confluence")
+main_mcp.mount(requirement_yogi_mcp, "requirement_yogi")
 
 
 @main_mcp.custom_route("/healthz", methods=["GET"], include_in_schema=False)

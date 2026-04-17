@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import dataclasses
 import logging
+import os
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
@@ -16,6 +17,7 @@ from starlette.requests import Request
 
 from mcp_atlassian.confluence import ConfluenceConfig, ConfluenceFetcher
 from mcp_atlassian.jira import JiraConfig, JiraFetcher
+from mcp_atlassian.requirement_yogi import RequirementYogiConfig, RequirementYogiFetcher
 from mcp_atlassian.servers.context import MainAppContext
 from mcp_atlassian.utils.oauth import OAuthConfig
 from mcp_atlassian.utils.urls import validate_url_for_ssrf
@@ -704,3 +706,119 @@ async def get_confluence_fetcher(ctx: Context) -> ConfluenceFetcher:
         ValueError: If configuration or credentials are invalid.
     """
     return await _get_fetcher(ctx, _confluence_spec())
+
+
+async def get_requirement_yogi_fetcher(ctx: Context) -> RequirementYogiFetcher:
+    """Returns a RequirementYogiFetcher instance appropriate for the current request context.
+
+    Requirements Yogi uses Confluence authentication, so this fetcher reuses
+    Confluence configuration and credentials.
+
+    Args:
+        ctx: The FastMCP context.
+
+    Returns:
+        RequirementYogiFetcher instance for the current user or global config.
+
+    Raises:
+        ValueError: If Confluence configuration is not available.
+    """
+
+    logger.debug(f"get_requirement_yogi_fetcher: ENTERED. Context ID: {id(ctx)}")
+
+    try:
+        request: Request = get_http_request()
+        logger.debug(
+            f"get_requirement_yogi_fetcher: In HTTP request context. "
+            f"State.user_auth_type: {getattr(request.state, 'user_atlassian_auth_type', 'N/A')}"
+        )
+
+        user_auth_type = getattr(request.state, "user_atlassian_auth_type", None)
+        user_token = getattr(request.state, "user_atlassian_token", None)
+        user_email = getattr(request.state, "user_atlassian_email", None)
+
+        lifespan_ctx_dict = ctx.request_context.lifespan_context  # type: ignore
+        app_lifespan_ctx: MainAppContext | None = (
+            lifespan_ctx_dict.get("app_lifespan_context")
+            if isinstance(lifespan_ctx_dict, dict)
+            else None
+        )
+
+        if not app_lifespan_ctx or not app_lifespan_ctx.full_confluence_config:
+            raise ValueError(
+                "Confluence configuration is required for Requirements Yogi. "
+                "Ensure Confluence is properly configured."
+            )
+
+        if user_auth_type and user_token:
+            logger.info(
+                f"Creating user-specific RequirementYogiFetcher (type: {user_auth_type}) "
+                f"for user {user_email or 'unknown'}"
+            )
+            confluence_config = app_lifespan_ctx.full_confluence_config
+            yogi_config = RequirementYogiConfig(
+                confluence_url=confluence_config.url,
+                auth_type=user_auth_type,  # type: ignore
+                username=user_email if user_auth_type == "basic" else None,
+                api_token=user_token if user_auth_type == "basic" else None,
+                personal_token=user_token if user_auth_type == "pat" else None,
+                ssl_verify=confluence_config.ssl_verify,
+                spaces_filter=os.getenv("REQUIREMENT_YOGI_SPACES_FILTER"),
+                http_proxy=confluence_config.http_proxy,
+                https_proxy=confluence_config.https_proxy,
+                no_proxy=confluence_config.no_proxy,
+                socks_proxy=confluence_config.socks_proxy,
+                custom_headers=confluence_config.custom_headers,
+                client_cert=confluence_config.client_cert,
+                client_key=confluence_config.client_key,
+                client_key_password=confluence_config.client_key_password,
+            )
+            return RequirementYogiFetcher(config=yogi_config)
+
+        logger.debug(
+            "get_requirement_yogi_fetcher: Using global Confluence configuration"
+        )
+
+    except RuntimeError:
+        logger.debug(
+            "Not in an HTTP request context. Using global configuration for Requirements Yogi."
+        )
+
+        lifespan_ctx_dict = ctx.request_context.lifespan_context  # type: ignore
+        app_lifespan_ctx = (
+            lifespan_ctx_dict.get("app_lifespan_context")
+            if isinstance(lifespan_ctx_dict, dict)
+            else None
+        )
+
+        if not app_lifespan_ctx or not app_lifespan_ctx.full_confluence_config:
+            raise ValueError(
+                "Confluence configuration is required for Requirements Yogi"
+            )
+
+    confluence_config = app_lifespan_ctx.full_confluence_config  # type: ignore[union-attr]
+
+    yogi_config = RequirementYogiConfig(
+        confluence_url=confluence_config.url,
+        auth_type=confluence_config.auth_type,  # type: ignore
+        username=confluence_config.username,
+        api_token=confluence_config.api_token,
+        personal_token=confluence_config.personal_token,
+        ssl_verify=confluence_config.ssl_verify,
+        spaces_filter=os.getenv("REQUIREMENT_YOGI_SPACES_FILTER"),
+        http_proxy=confluence_config.http_proxy,
+        https_proxy=confluence_config.https_proxy,
+        no_proxy=confluence_config.no_proxy,
+        socks_proxy=confluence_config.socks_proxy,
+        custom_headers=confluence_config.custom_headers,
+        client_cert=confluence_config.client_cert,
+        client_key=confluence_config.client_key,
+        client_key_password=confluence_config.client_key_password,
+    )
+
+    logger.debug(
+        f"get_requirement_yogi_fetcher: Created RequirementYogiFetcher with "
+        f"auth_type={yogi_config.auth_type}"
+    )
+
+    return RequirementYogiFetcher(config=yogi_config)
