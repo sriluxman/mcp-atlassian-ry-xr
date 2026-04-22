@@ -249,3 +249,38 @@ enabled (fail-closed behavior to prevent accidental exposure).
 </Note>
 
 See [Toolset Groups](/docs/tools-reference#toolset-groups) for the full list of available toolsets.
+
+## Requirements Yogi
+
+<Note>
+Requirements Yogi tools are available in this fork of MCP Atlassian. They require the [Requirements Yogi](https://www.requirementsyogi.com/) app to be installed in your Confluence instance.
+</Note>
+
+Requirements Yogi reuses Confluence authentication automatically — no additional credentials are needed. Configure it the same way as Confluence (see [Connection Settings](#connection-settings) above).
+
+### Requirements Yogi Filtering
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `REQUIREMENT_YOGI_SPACES_FILTER` | Limit access to specific Confluence spaces | `TYS,OCX,DEV` |
+
+When set, only requirements from the listed space keys are accessible. This is independent of `CONFLUENCE_SPACES_FILTER`.
+
+```bash
+# Allow Requirements Yogi access only in these spaces
+REQUIREMENT_YOGI_SPACES_FILTER=TYS,OCX,DEV
+```
+
+### Enabling Requirements Yogi Tools
+
+Requirements Yogi tools belong to the `requirement_yogi` toolset (not a core toolset):
+
+```bash
+# Enable alongside core tools
+TOOLSETS=default,requirement_yogi
+
+# Enable all toolsets including Requirements Yogi
+TOOLSETS=all
+```
+
+See [Requirements Yogi Tools](/docs/tools/requirement-yogi) for the full tool reference and [Search Syntax](/docs/guides/requirement-yogi-search) for the query language.

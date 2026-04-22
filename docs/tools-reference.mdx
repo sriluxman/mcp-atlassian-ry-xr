@@ -1,9 +1,9 @@
 ---
 title: "Tools Reference"
-description: "Overview of all 72 MCP tools for Jira and Confluence — organized by category with quick links"
+description: "Overview of all MCP tools for Jira, Confluence, and Requirements Yogi — organized by category with quick links"
 ---
 
-MCP Atlassian provides **72 tools** for interacting with Jira and Confluence. Tools are organized by category below.
+MCP Atlassian provides **72 tools** for Jira and Confluence, plus **6 Requirements Yogi tools** (fork extension). Tools are organized by category below.
 
 ## Jira Tools
 
@@ -51,6 +51,21 @@ MCP Atlassian provides **72 tools** for interacting with Jira and Confluence. To
   </Card>
 </CardGroup>
 
+## Requirements Yogi Tools
+
+<Note>
+Requirements Yogi tools are a fork extension. They require the [Requirements Yogi](https://www.requirementsyogi.com/) app installed in your Confluence instance and reuse Confluence authentication automatically.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Requirements" icon="list-check" href="/docs/tools/requirement-yogi">
+    Search, read, create, update, and delete requirements
+  </Card>
+  <Card title="Search Syntax" icon="magnifying-glass" href="/docs/guides/requirement-yogi-search">
+    Requirements Yogi query language reference
+  </Card>
+</CardGroup>
+
 ## Tool Access Control
 
 ### Toolset Groups
@@ -88,13 +103,22 @@ Toolsets group related tools for easier management via `TOOLSETS` env var or `--
 | `confluence_analytics` | No | `confluence_get_page_views` |
 | `confluence_attachments` | No | `confluence_upload_attachment`, `confluence_upload_attachments`, `confluence_get_attachments`, `confluence_download_attachment`, `confluence_download_content_attachments`, `confluence_delete_attachment`, `confluence_get_page_images` |
 
+**Requirements Yogi Toolsets (1):**
+
+| Toolset | Core | Tools |
+|---------|:----:|-------|
+| `requirement_yogi` | No | `requirement_yogi_get_requirement`, `requirement_yogi_list_requirements`, `requirement_yogi_search_requirements`, `requirement_yogi_create_requirement`, `requirement_yogi_update_requirement`, `requirement_yogi_delete_requirement` |
+
 ```bash
 # All toolsets are enabled when TOOLSETS is not set.
 # To restrict to core toolsets plus specific extras:
 TOOLSETS=default,jira_agile,jira_attachments
 
-# Enable all toolsets (72 tools)
+# Enable all toolsets including Requirements Yogi (78 tools)
 TOOLSETS=all
+
+# Enable Requirements Yogi toolset explicitly
+TOOLSETS=default,requirement_yogi
 
 # Command line
 uvx mcp-atlassian --toolsets "default,jira_agile"

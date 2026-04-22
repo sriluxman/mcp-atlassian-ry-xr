@@ -1,0 +1,222 @@
+---
+title: "Requirements Yogi"
+description: "Search, read, create, update, and delete Requirements Yogi requirements via MCP"
+---
+
+<Note>
+Requirements Yogi tools are available in this fork of MCP Atlassian. They require the [Requirements Yogi](https://www.requirementsyogi.com/) app installed in your Confluence instance and reuse Confluence credentials automatically.
+</Note>
+
+---
+
+### Search Requirements
+
+Advanced search for requirements using the Requirements Yogi query language.
+
+**Tool name:** `requirement_yogi_search_requirements`
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `space_key` | `string` | Yes | The Confluence space key to search in (e.g., `OCX`, `TYS`) |
+| `query` | `string` | Yes | Requirements Yogi search query (see [Search Syntax](/docs/guides/requirement-yogi-search)) |
+| `limit` | `integer` | No | Maximum results to return (1–200, default: 50) |
+
+**Example:**
+
+```json
+{
+  "space_key": "OCX",
+  "query": "@Category = 'Functional' AND @Priority = 'High' AND NOT (jira ~ '%')",
+  "limit": 50
+}
+```
+
+**Response includes:** matched requirements, total count, pagination info, query explanation, and the internal AO SQL query for debugging.
+
+<Tip>
+`search_requirements` is the primary tool for Requirements Yogi. Prefer it over `list_requirements` whenever you want filtered results. See [Search Syntax](/docs/guides/requirement-yogi-search) for the full query language.
+</Tip>
+
+---
+
+### List Requirements
+
+List all requirements in a space, optionally filtered by a query.
+
+**Tool name:** `requirement_yogi_list_requirements`
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `space_key` | `string` | Yes | The Confluence space key |
+| `limit` | `integer` | No | Maximum results to return (1–200, default: 50) |
+| `query` | `string` | No | Optional Requirements Yogi query to pre-filter results |
+
+**Example:**
+
+```json
+{"space_key": "TYS", "limit": 100}
+```
+
+<Note>
+Without a `query`, this returns all requirements in the space up to `limit`. For large spaces, use `search_requirements` with a specific query instead.
+</Note>
+
+---
+
+### Get Requirement
+
+Retrieve a single requirement by its key.
+
+**Tool name:** `requirement_yogi_get_requirement`
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `space_key` | `string` | Yes | The Confluence space key |
+| `requirement_key` | `string` | Yes | The unique requirement key (e.g., `AS_001`, `REQ-042`) |
+
+**Example:**
+
+```json
+{"space_key": "OCX", "requirement_key": "AS_001"}
+```
+
+**Response includes:** key, space key, status, content (Markdown), custom properties, references to other requirements, and linked Jira issues.
+
+---
+
+### Create Requirement
+
+Create a new requirement in a Confluence space.
+
+<Note>This is a **write** tool. Disabled when `READ_ONLY_MODE=true`.</Note>
+
+**Tool name:** `requirement_yogi_create_requirement`
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `space_key` | `string` | Yes | The Confluence space key |
+| `requirement_key` | `string` | Yes | Unique key for the new requirement (e.g., `AS_099`) |
+| `title` | `string` | Yes | Requirement title |
+| `description` | `string` | No | Requirement content/description |
+| `properties` | `object` | No | Custom property key/value pairs (e.g., `{"Category": "Functional", "Priority": "High"}`) |
+
+**Example:**
+
+```json
+{
+  "space_key": "TYS",
+  "requirement_key": "AS_099",
+  "title": "The system shall support OAuth 2.0 authentication",
+  "description": "Users must be able to authenticate via OAuth 2.0 with external identity providers.",
+  "properties": {"Category": "Security", "Priority": "High"}
+}
+```
+
+---
+
+### Update Requirement
+
+Update an existing requirement's title, description, or properties.
+
+<Note>This is a **write** tool. Disabled when `READ_ONLY_MODE=true`.</Note>
+
+**Tool name:** `requirement_yogi_update_requirement`
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `space_key` | `string` | Yes | The Confluence space key |
+| `requirement_key` | `string` | Yes | Key of the requirement to update |
+| `title` | `string` | No | New title (omit to leave unchanged) |
+| `description` | `string` | No | New description (omit to leave unchanged) |
+| `properties` | `object` | No | Properties to update (omit to leave unchanged) |
+
+**Example:**
+
+```json
+{
+  "space_key": "TYS",
+  "requirement_key": "AS_099",
+  "properties": {"Priority": "Critical", "Status": "Approved"}
+}
+```
+
+---
+
+### Delete Requirement
+
+Delete a requirement from a Confluence space.
+
+<Note>This is a **write** tool. Disabled when `READ_ONLY_MODE=true`.</Note>
+
+**Tool name:** `requirement_yogi_delete_requirement`
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `space_key` | `string` | Yes | The Confluence space key |
+| `requirement_key` | `string` | Yes | Key of the requirement to delete |
+
+**Example:**
+
+```json
+{"space_key": "TYS", "requirement_key": "AS_099"}
+```
+
+---
+
+## Requirement Object Structure
+
+All tools return requirement data in this shape:
+
+```json
+{
+  "key": "AS_001",
+  "space_key": "OCX",
+  "status": "ACTIVE",
+  "content": "Markdown content of the requirement",
+  "properties": {
+    "Category": "Functional",
+    "Priority": "High",
+    "Product": "OpcUaCs"
+  },
+  "references": [
+    {"key": "REQ-002", "space_key": "TYS", "direction": "TO"}
+  ],
+  "jira_links": [
+    {"issue_key": "OCX-123", "summary": "Implement auth flow", "status": "In Progress"}
+  ]
+}
+```
+
+Search results additionally include pagination fields (`count`, `limit`, `offset`), a human-readable `explanation`, and an `ao_sql` field (internal debug query).
+
+## Common AI Workflows
+
+```
+"Find all functional requirements in OCX space not yet linked to a Jira issue"
+→ requirement_yogi_search_requirements(space_key="OCX", query="@Category = 'Functional' AND NOT (jira ~ '%')")
+
+"Show me requirement AS_001 and what it references"
+→ requirement_yogi_get_requirement(space_key="OCX", requirement_key="AS_001")
+
+"List high-priority security requirements in TYS"
+→ requirement_yogi_search_requirements(space_key="TYS", query="@Category = 'Security' AND @Priority = 'High'")
+
+"Find requirements implemented by OCX-42"
+→ requirement_yogi_search_requirements(space_key="OCX", query="jira@implements = 'OCX-42'")
+```
+
+## Configuration
+
+See [Requirements Yogi Configuration](/docs/configuration#requirements-yogi) for environment variables and toolset setup, and [Search Syntax](/docs/guides/requirement-yogi-search) for the full query language reference.

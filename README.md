@@ -5,7 +5,7 @@
 ![PePy - Total Downloads](https://static.pepy.tech/personalized-badge/mcp-atlassian?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Total%20Downloads)
 [![Run Tests](https://github.com/sooperset/mcp-atlassian/actions/workflows/tests.yml/badge.svg)](https://github.com/sooperset/mcp-atlassian/actions/workflows/tests.yml)
 ![License](https://img.shields.io/github/license/sooperset/mcp-atlassian)
-[![Docs](https://img.shields.io/badge/docs-mintlify-blue)](https://mcp-atlassian.soomiles.com)
+[![Docs](https://img.shields.io/badge/docs-github--pages-blue)](https://sriluxman.github.io/mcp-atlassian-ry)
 
 Model Context Protocol (MCP) server for Atlassian products (Confluence and Jira). Supports both Cloud and Server/Data Center deployments.
 
@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/7fe9c488-ad0c-4876-9b54-120b666bb785
 
 Go to https://id.atlassian.com/manage-profile/security/api-tokens and create a token.
 
-> For Server/Data Center, use a Personal Access Token instead. See [Authentication](https://mcp-atlassian.soomiles.com/docs/authentication).
+> For Server/Data Center, use a Personal Access Token instead. See [Authentication](https://sriluxman.github.io/mcp-atlassian-ry/authentication).
 
 ### 2. Configure Your IDE
 
@@ -49,7 +49,7 @@ Add to your Claude Desktop or Cursor MCP configuration:
 }
 ```
 
-> **Server/Data Center users**: Use `JIRA_PERSONAL_TOKEN` instead of `JIRA_USERNAME` + `JIRA_API_TOKEN`. See [Authentication](https://mcp-atlassian.soomiles.com/docs/authentication) for details.
+> **Server/Data Center users**: Use `JIRA_PERSONAL_TOKEN` instead of `JIRA_USERNAME` + `JIRA_API_TOKEN`. See [Authentication](https://sriluxman.github.io/mcp-atlassian-ry/authentication) for details.
 
 ### 3. Start Using
 
@@ -61,20 +61,16 @@ Ask your AI assistant to:
 
 ## Documentation
 
-Full documentation is available at **[mcp-atlassian.soomiles.com](https://mcp-atlassian.soomiles.com)**.
-
-Documentation is also available in [llms.txt format](https://llmstxt.org/), which LLMs can consume easily:
-- [`llms.txt`](https://mcp-atlassian.soomiles.com/llms.txt) — documentation sitemap
-- [`llms-full.txt`](https://mcp-atlassian.soomiles.com/llms-full.txt) — complete documentation
+Full documentation is available at **[sriluxman.github.io/mcp-atlassian-ry](https://sriluxman.github.io/mcp-atlassian-ry)**.
 
 | Topic | Description |
 |-------|-------------|
-| [Installation](https://mcp-atlassian.soomiles.com/docs/installation) | uvx, Docker, pip, from source |
-| [Authentication](https://mcp-atlassian.soomiles.com/docs/authentication) | API tokens, PAT, OAuth 2.0 |
-| [Configuration](https://mcp-atlassian.soomiles.com/docs/configuration) | IDE setup, environment variables |
-| [HTTP Transport](https://mcp-atlassian.soomiles.com/docs/http-transport) | SSE, streamable-http, multi-user |
-| [Tools Reference](https://mcp-atlassian.soomiles.com/docs/tools-reference) | All Jira & Confluence tools |
-| [Troubleshooting](https://mcp-atlassian.soomiles.com/docs/troubleshooting) | Common issues & debugging |
+| [Installation](https://sriluxman.github.io/mcp-atlassian-ry/installation) | uvx, Docker, pip, from source |
+| [Authentication](https://sriluxman.github.io/mcp-atlassian-ry/authentication) | API tokens, PAT, OAuth 2.0 |
+| [Configuration](https://sriluxman.github.io/mcp-atlassian-ry/configuration) | IDE setup, environment variables |
+| [HTTP Transport](https://sriluxman.github.io/mcp-atlassian-ry/http-transport) | SSE, streamable-http, multi-user |
+| [Tools Reference](https://sriluxman.github.io/mcp-atlassian-ry/tools-reference) | All Jira & Confluence tools |
+| [Troubleshooting](https://sriluxman.github.io/mcp-atlassian-ry/troubleshooting) | Common issues & debugging |
 
 ## Compatibility
 
@@ -95,7 +91,28 @@ Documentation is also available in [llms.txt format](https://llmstxt.org/), whic
 | `jira_update_issue` - Update issues | `confluence_update_page` - Update pages |
 | `jira_transition_issue` - Change status | `confluence_add_comment` - Add comments |
 
-**72 tools total** — See [Tools Reference](https://mcp-atlassian.soomiles.com/docs/tools-reference) for the complete list.
+**72 Jira & Confluence tools** — See [Tools Reference](https://sriluxman.github.io/mcp-atlassian-ry/tools-reference) for the complete list.
+
+## Requirements Yogi Integration
+
+This fork extends MCP Atlassian with [Requirements Yogi](https://www.requirementsyogi.com/) support — 6 additional tools for managing requirements directly from your AI assistant. Requirements Yogi reuses your Confluence credentials; no separate login needed.
+
+| Tool | Description |
+|------|-------------|
+| `requirement_yogi_search_requirements` | Advanced search with Requirements Yogi query syntax |
+| `requirement_yogi_get_requirement` | Retrieve a requirement by key |
+| `requirement_yogi_list_requirements` | List all requirements in a space |
+| `requirement_yogi_create_requirement` | Create a new requirement |
+| `requirement_yogi_update_requirement` | Update an existing requirement |
+| `requirement_yogi_delete_requirement` | Delete a requirement |
+
+Confluence credentials from your Quick Start configuration are automatically used. To restrict access to specific spaces, add:
+
+```bash
+REQUIREMENT_YOGI_SPACES_FILTER=TYS,OCX,DEV
+```
+
+See [Requirements Yogi Search Syntax](REQUIREMENTS_YOGI_SEARCH_SYNTAX.md) for the query language reference, and the [docs](docs/) for full tool documentation.
 
 ## Security
 

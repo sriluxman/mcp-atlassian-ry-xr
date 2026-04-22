@@ -1,0 +1,250 @@
+---
+title: "Requirements Yogi Search Syntax"
+description: "Query language reference for the requirement_yogi_search_requirements tool"
+---
+
+<Note>
+Requirements Yogi tools are available in this fork of MCP Atlassian. The `requirement_yogi_search_requirements` tool accepts the query language described on this page.
+</Note>
+
+## Quick Start
+
+```
+# Exact key match
+key = 'REQ-001'
+
+# Wildcard by prefix
+key ~ 'AS_%'
+
+# Property filter
+@Category = 'Functional'
+
+# Combined filters
+key ~ 'AS_%' AND @Priority = 'High' AND NOT (jira ~ '%')
+```
+
+## Operators
+
+| Operator | Description | Example |
+|----------|-------------|---------|
+| `=` or `==` | Exact equality | `key = 'REQ-001'` |
+| `~` | Soft equality with `%` wildcards | `key ~ 'REQ-%'` |
+| `AND` | Both conditions must match | `key ~ 'AS_%' AND @Priority = 'High'` |
+| `OR` | Either condition matches | `@Category = 'Functional' OR @Category = 'Security'` |
+| `NOT` | Negation | `NOT (jira ~ '%')` |
+| `()` | Grouping | `(key ~ 'AS_%' OR key ~ 'BS_%') AND @Priority = 'High'` |
+| `IS NULL` | Field has no value | `@Owner IS NULL` |
+| `IS NOT NULL` | Field has a value | `baseline IS NOT NULL` |
+
+## Fields
+
+### Basic Fields
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `key` | Requirement key | `key = 'AS_001'` or `key ~ 'AS_%'` |
+| `spaceKey` | Confluence space key (case-sensitive) | `spaceKey = 'OCX'` |
+| `status` | Requirement status | `status = 'ACTIVE'` (default), `'DELETED'`, `'MOVED'` |
+| `text` | Requirement content (excludes properties) | `text ~ '%authentication%'` |
+| `page` | Page ID where requirement is defined | `page = 467382` |
+| `pageHistory` | Page ID across all versions | `pageHistory ~ 123` |
+| `links` | Page where requirement is linked or defined | `links = 467382` |
+
+### Jira Integration
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `jira` | Linked Jira issue key | `jira = 'OCX-11076'` |
+| `jira@relationship` | Jira issue with a specific relationship type | `jira@implements = 'OCX-11076'` |
+
+```
+# Linked to a specific issue
+jira = 'OCX-11076'
+
+# Specific relationship
+jira@implements = 'PROJ-123'
+
+# Not linked to any Jira issue
+NOT (jira ~ '%')
+```
+
+### Properties
+
+Custom requirement properties use the `@` prefix. The property name follows the `@` sign, escaped with `\` for spaces.
+
+```
+# Simple property
+@Category = 'Functional'
+
+# Property name with space
+@Main\ Category = 'Security'
+
+# External property
+ext@EstimatedHours = '8'
+
+# User property
+@Assignee = user('admin')
+
+# Emoticon/special value
+@Status = '(/)'
+```
+
+### Dependencies
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `FROM` | Requirements referenced by this key | `FROM = 'REQ-001'` |
+| `TO` | Requirements that reference this key | `TO = 'REQ-001'` |
+| `FROM@relationship` | Outgoing dependency with specific type | `FROM@refines = 'REQ-001'` |
+| `TO@relationship` | Incoming dependency with specific type | `TO@implements = 'REQ-002'` |
+
+```
+# Find what references REQ-001
+TO = 'REQ-001'
+
+# Find what REQ-001 references
+FROM = 'REQ-001'
+
+# Wildcard: references any AS requirement
+FROM ~ 'AS-%'
+```
+
+### Baselines
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `baseline` | Baseline name or number | `baseline = 3` or `baseline = 'My Baseline'` |
+| `baseline was` | Previous version baseline (RY 3.2+) | `baseline was 3` |
+
+```
+# In baseline 3
+baseline = 3
+
+# In v4 and previously in v3
+baseline = 4 AND baseline was 3
+```
+
+### Special Functions
+
+| Function | Description | Example |
+|----------|-------------|---------|
+| `isModified('version')` | Modified since a baseline version | `isModified('7')` |
+| `hasLastTest('result')` | Last test result matches | `hasLastTest('%Success%')` |
+| `hasTest('result')` | Any test result matches | `hasTest('Passed')` |
+| `user('username')` | Reference a user by name | `@Assignee = user('admin')` |
+
+### Excel Import
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `excel` | Attachment ID from which requirements were imported | `excel = '48496653'` |
+
+## Common Patterns
+
+<Tabs>
+  <Tab title="By Key">
+    ```
+    # Exact match
+    key = 'REQ-001'
+
+    # Starts with prefix
+    key ~ 'AS_%'
+
+    # Multiple prefixes
+    key ~ 'AS_%' OR key ~ 'BS_%'
+    ```
+  </Tab>
+  <Tab title="By Property">
+    ```
+    # Single property
+    @Category = 'Functional'
+
+    # Multiple AND
+    @Category = 'Functional' AND @Priority = 'High'
+
+    # Property exists
+    @Category IS NOT NULL
+
+    # Property is missing
+    @Category IS NULL
+    ```
+  </Tab>
+  <Tab title="By Jira">
+    ```
+    # Linked to specific issue
+    jira = 'OCX-11076'
+
+    # Any Jira link
+    jira ~ '%'
+
+    # No Jira link
+    NOT (jira ~ '%')
+
+    # Specific relationship
+    jira@implements = 'OCX-11076'
+    ```
+  </Tab>
+  <Tab title="By Dependencies">
+    ```
+    # References REQ-001
+    FROM = 'REQ-001'
+
+    # Referenced by REQ-001
+    TO = 'REQ-001'
+
+    # Has any outgoing dependencies
+    FROM ~ '%'
+
+    # No outgoing dependencies
+    NOT (FROM ~ '%')
+    ```
+  </Tab>
+</Tabs>
+
+## Complex Query Examples
+
+```
+# High-priority functional requirements in AS group
+key ~ 'AS_%' AND @Category = 'Functional' AND @Priority = 'High'
+
+# Linked to Jira but not yet implemented
+jira ~ '%' AND NOT (jira@implements ~ '%')
+
+# Modified since baseline 5, without Jira links
+isModified('5') AND NOT (jira ~ '%')
+
+# On a specific page, functional only
+page = 467382 AND @Category = 'Functional'
+
+# Has dependencies but no test results
+(FROM ~ '%' OR TO ~ '%') AND NOT hasLastTest('%')
+```
+
+## Performance Tips
+
+1. **Always specify `space_key`** — cross-space searches are slower
+2. **Prefer key patterns over text** — `key ~ 'AS_%'` is faster than `text ~ '%AS%'`
+3. **Use reasonable `limit` values** — default 50, max 200
+4. **Filter by status explicitly** — default is `ACTIVE`; explicit filtering helps the planner
+5. **Use indexed fields first** — `key`, `status`, `jira` are indexed; `text` is a full-scan
+
+## Limitations
+
+- Cross-space: single `space_key` per query only
+- Wildcards: `%` only (no regex)
+- Case sensitivity: `spaceKey` is case-sensitive; most other fields are case-insensitive
+- `text` searches requirement content only, not the full Confluence page
+
+## Version Notes
+
+| Version | Changes |
+|---------|---------|
+| RY 3.2+ | Added `baseline was` field |
+| RY 3.1+ | Added `pageHistory` and `links` fields; changed `page ~` to exact page only |
+| RY 2.4+ | Added emoticon support, list properties |
+
+## Reference
+
+- [Official Requirements Yogi Search Syntax](https://docs.requirementyogi.com/data-center/search-syntax)
+- [Requirements Yogi REST API](https://developer.requirementyogi.com/)
+- [requirement_yogi_search_requirements tool](/docs/tools/requirement-yogi#search-requirements)
