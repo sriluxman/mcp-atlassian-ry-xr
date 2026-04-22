@@ -1,6 +1,6 @@
 # MCP Atlassian Helm Chart
 
-This Helm chart deploys the [MCP Atlassian](https://github.com/sooperset/mcp-atlassian) server to Kubernetes, providing a Model Context Protocol (MCP) server for Jira and Confluence integration.
+This Helm chart deploys the [MCP Atlassian](https://github.com/sriluxman/mcp-atlassian-ry-xr) server to Kubernetes, providing a Model Context Protocol (MCP) server for Jira and Confluence integration.
 
 ## Prerequisites
 
@@ -153,7 +153,7 @@ helm uninstall mcp-atlassian
 
 ## Support
 
-For issues with the MCP Atlassian server, see https://github.com/sooperset/mcp-atlassian
+For issues with the MCP Atlassian server, see https://github.com/sriluxman/mcp-atlassian-ry-xr
 
 ## License
 

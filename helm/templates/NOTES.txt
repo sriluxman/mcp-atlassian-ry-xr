@@ -96,4 +96,4 @@ View logs:
 Describe deployment:
   kubectl describe deployment -n {{ .Release.Namespace }} {{ include "mcp-atlassian.fullname" . }}
 
-For more information, visit: https://github.com/sooperset/mcp-atlassian
+For more information, visit: https://github.com/sriluxman/mcp-atlassian-ry-xr
