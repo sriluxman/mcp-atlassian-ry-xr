@@ -19,7 +19,7 @@ Advanced search for requirements using the Requirements Yogi query language.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `space_key` | `string` | Yes | The Confluence space key to search in (e.g., `OCX`, `TYS`) |
+| `space_key` | `string` | Yes | The Confluence space key to search in (e.g., `NOVA`, `LUNA`) |
 | `query` | `string` | Yes | Requirements Yogi search query (see [Search Syntax](/docs/guides/requirement-yogi-search)) |
 | `limit` | `integer` | No | Maximum results to return (1–200, default: 50) |
 
@@ -27,7 +27,7 @@ Advanced search for requirements using the Requirements Yogi query language.
 
 ```json
 {
-  "space_key": "OCX",
+  "space_key": "NOVA",
   "query": "@Category = 'Functional' AND @Priority = 'High' AND NOT (jira ~ '%')",
   "limit": 50
 }
@@ -58,7 +58,7 @@ List all requirements in a space, optionally filtered by a query.
 **Example:**
 
 ```json
-{"space_key": "TYS", "limit": 100}
+{"space_key": "LUNA", "limit": 100}
 ```
 
 <Note>
@@ -78,12 +78,12 @@ Retrieve a single requirement by its key.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `space_key` | `string` | Yes | The Confluence space key |
-| `requirement_key` | `string` | Yes | The unique requirement key (e.g., `AS_001`, `REQ-042`) |
+| `requirement_key` | `string` | Yes | The unique requirement key (e.g., `REQ_001`, `REQ-042`) |
 
 **Example:**
 
 ```json
-{"space_key": "OCX", "requirement_key": "AS_001"}
+{"space_key": "NOVA", "requirement_key": "REQ_001"}
 ```
 
 **Response includes:** key, space key, status, content (Markdown), custom properties, references to other requirements, and linked Jira issues.
@@ -103,7 +103,7 @@ Create a new requirement in a Confluence space.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `space_key` | `string` | Yes | The Confluence space key |
-| `requirement_key` | `string` | Yes | Unique key for the new requirement (e.g., `AS_099`) |
+| `requirement_key` | `string` | Yes | Unique key for the new requirement (e.g., `REQ_099`) |
 | `title` | `string` | Yes | Requirement title |
 | `description` | `string` | No | Requirement content/description |
 | `properties` | `object` | No | Custom property key/value pairs (e.g., `{"Category": "Functional", "Priority": "High"}`) |
@@ -112,8 +112,8 @@ Create a new requirement in a Confluence space.
 
 ```json
 {
-  "space_key": "TYS",
-  "requirement_key": "AS_099",
+  "space_key": "LUNA",
+  "requirement_key": "REQ_099",
   "title": "The system shall support OAuth 2.0 authentication",
   "description": "Users must be able to authenticate via OAuth 2.0 with external identity providers.",
   "properties": {"Category": "Security", "Priority": "High"}
@@ -144,8 +144,8 @@ Update an existing requirement's title, description, or properties.
 
 ```json
 {
-  "space_key": "TYS",
-  "requirement_key": "AS_099",
+  "space_key": "LUNA",
+  "requirement_key": "REQ_099",
   "properties": {"Priority": "Critical", "Status": "Approved"}
 }
 ```
@@ -170,7 +170,7 @@ Delete a requirement from a Confluence space.
 **Example:**
 
 ```json
-{"space_key": "TYS", "requirement_key": "AS_099"}
+{"space_key": "LUNA", "requirement_key": "REQ_099"}
 ```
 
 ---
@@ -181,8 +181,8 @@ All tools return requirement data in this shape:
 
 ```json
 {
-  "key": "AS_001",
-  "space_key": "OCX",
+  "key": "REQ_001",
+  "space_key": "NOVA",
   "status": "ACTIVE",
   "content": "Markdown content of the requirement",
   "properties": {
@@ -191,10 +191,10 @@ All tools return requirement data in this shape:
     "Product": "OpcUaCs"
   },
   "references": [
-    {"key": "REQ-002", "space_key": "TYS", "direction": "TO"}
+    {"key": "REQ-002", "space_key": "LUNA", "direction": "TO"}
   ],
   "jira_links": [
-    {"issue_key": "OCX-123", "summary": "Implement auth flow", "status": "In Progress"}
+    {"issue_key": "NOVA-123", "summary": "Implement auth flow", "status": "In Progress"}
   ]
 }
 ```
@@ -204,17 +204,17 @@ Search results additionally include pagination fields (`count`, `limit`, `offset
 ## Common AI Workflows
 
 ```
-"Find all functional requirements in OCX space not yet linked to a Jira issue"
-→ requirement_yogi_search_requirements(space_key="OCX", query="@Category = 'Functional' AND NOT (jira ~ '%')")
+"Find all functional requirements in NOVA space not yet linked to a Jira issue"
+→ requirement_yogi_search_requirements(space_key="NOVA", query="@Category = 'Functional' AND NOT (jira ~ '%')")
 
-"Show me requirement AS_001 and what it references"
-→ requirement_yogi_get_requirement(space_key="OCX", requirement_key="AS_001")
+"Show me requirement REQ_001 and what it references"
+→ requirement_yogi_get_requirement(space_key="NOVA", requirement_key="REQ_001")
 
-"List high-priority security requirements in TYS"
-→ requirement_yogi_search_requirements(space_key="TYS", query="@Category = 'Security' AND @Priority = 'High'")
+"List high-priority security requirements in LUNA"
+→ requirement_yogi_search_requirements(space_key="LUNA", query="@Category = 'Security' AND @Priority = 'High'")
 
-"Find requirements implemented by OCX-42"
-→ requirement_yogi_search_requirements(space_key="OCX", query="jira@implements = 'OCX-42'")
+"Find requirements implemented by NOVA-42"
+→ requirement_yogi_search_requirements(space_key="NOVA", query="jira@implements = 'NOVA-42'")
 ```
 
 ## Configuration

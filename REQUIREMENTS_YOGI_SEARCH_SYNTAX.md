@@ -9,13 +9,13 @@ This guide documents the powerful search query language for Requirements Yogi, w
 query = "key = 'REQ-001'"
 
 # Wildcard search
-query = "key ~ 'AS_%'"
+query = "key ~ 'REQ_%'"
 
 # Property search
 query = "@Category = 'Functional'"
 
 # Boolean combination
-query = "key ~ 'AS_%' AND @Priority = 'High'"
+query = "key ~ 'REQ_%' AND @Priority = 'High'"
 ```
 
 ## Operators
@@ -24,10 +24,10 @@ query = "key ~ 'AS_%' AND @Priority = 'High'"
 |----------|-------------|---------|
 | `=` or `==` | Strict equality | `key = 'REQ-001'` |
 | `~` | Soft equality with wildcards (use `%`) | `key ~ 'REQ-%'` |
-| `AND` | Boolean AND | `key ~ 'AS_%' AND @Priority = 'High'` |
+| `AND` | Boolean AND | `key ~ 'REQ_%' AND @Priority = 'High'` |
 | `OR` | Boolean OR | `@Category = 'Functional' OR @Category = 'Security'` |
 | `NOT` | Boolean NOT | `NOT (jira ~ '%')` |
-| `()` | Grouping | `(key ~ 'AS_%' OR key ~ 'BS_%') AND @Priority = 'High'` |
+| `()` | Grouping | `(key ~ 'REQ_%' OR key ~ 'SYS_%') AND @Priority = 'High'` |
 | `IS NULL` | Check for null value | `jira IS NULL` |
 | `IS NOT NULL` | Check for non-null value | `baseline IS NOT NULL` |
 
@@ -37,8 +37,8 @@ query = "key ~ 'AS_%' AND @Priority = 'High'"
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| `key` | Requirement key (unique per space) | `key = 'REQ-001'` or `key ~ 'AS_%'` |
-| `spaceKey` | Space key (case sensitive) | `spaceKey = 'OCX'` |
+| `key` | Requirement key (unique per space) | `key = 'REQ-001'` or `key ~ 'REQ_%'` |
+| `spaceKey` | Space key (case sensitive) | `spaceKey = 'NOVA'` |
 | `status` | Requirement status | `status = 'ACTIVE'` (default), `status = 'DELETED'`, `status = 'MOVED'` |
 | `text` | Requirement content (excludes properties) | `text ~ '%authentication%'` |
 | `page` | Page ID or version where requirement is defined | `page = 467382` |
@@ -50,12 +50,12 @@ query = "key ~ 'AS_%' AND @Priority = 'High'"
 | Field | Description | Example |
 |-------|-------------|---------|
 | `jira` | JIRA issue linked to requirement | `jira = 'JRA-21'` |
-| `jira@relationship` | JIRA issue with specific relationship | `jira@implements = 'OCX-11076'` |
+| `jira@relationship` | JIRA issue with specific relationship | `jira@implements = 'NOVA-11076'` |
 
 **Examples:**
 ```
 # Requirements linked to a JIRA issue
-jira = 'OCX-11076'
+jira = 'NOVA-11076'
 
 # Requirements with "implements" relationship
 jira@implements = 'PROJ-123'
@@ -162,10 +162,10 @@ excel ~ '%'
 key = 'REQ-001'
 
 # Starts with prefix
-key ~ 'AS_%'
+key ~ 'REQ_%'
 
 # Multiple prefixes
-key ~ 'AS_%' OR key ~ 'BS_%'
+key ~ 'REQ_%' OR key ~ 'SYS_%'
 ```
 
 ### By Content/Text
@@ -207,7 +207,7 @@ text ~ 'something %'
 
 ```
 # Linked to specific issue
-jira = 'OCX-11076'
+jira = 'NOVA-11076'
 
 # Linked to any JIRA issue
 jira ~ '%'
@@ -216,7 +216,7 @@ jira ~ '%'
 NOT (jira ~ '%')
 
 # Specific relationship type
-jira@implements = 'OCX-11076'
+jira@implements = 'NOVA-11076'
 ```
 
 ### By Dependencies
@@ -242,7 +242,7 @@ NOT (FROM ~ '%')
 
 ```
 # High priority functional requirements starting with AS
-key ~ 'AS_%' AND @Category = 'Functional' AND @Priority = 'High'
+key ~ 'REQ_%' AND @Category = 'Functional' AND @Priority = 'High'
 
 # Requirements linked to JIRA but not implemented
 jira ~ '%' AND NOT (jira@implements ~ '%')
@@ -263,7 +263,7 @@ page = 467382 AND @Category = 'Functional'
 
 ```
 # Good: Specific prefix
-key ~ 'AS_%'
+key ~ 'REQ_%'
 
 # Less efficient: Too broad
 text ~ '%a%'
@@ -273,7 +273,7 @@ text ~ '%a%'
 
 ```
 # Good: Multiple specific filters
-key ~ 'AS_%' AND @Priority = 'High' AND NOT (jira ~ '%')
+key ~ 'REQ_%' AND @Priority = 'High' AND NOT (jira ~ '%')
 
 # Less precise: Single broad filter
 key ~ '%'
@@ -303,10 +303,10 @@ NOT (@Priority = 'Low' OR status = 'DELETED')
 
 ```
 # Good: Group related conditions
-(key ~ 'AS_%' OR key ~ 'BS_%') AND @Priority = 'High'
+(key ~ 'REQ_%' OR key ~ 'SYS_%') AND @Priority = 'High'
 
 # Good: Clear precedence
-key ~ 'AS_%' AND (@Priority = 'High' OR @Priority = 'Critical')
+key ~ 'REQ_%' AND (@Priority = 'High' OR @Priority = 'Critical')
 ```
 
 ## API Usage
@@ -321,14 +321,14 @@ fetcher = RequirementYogiFetcher(config)
 
 # Simple search
 results = fetcher.list_requirements(
-    space_key="OCX",
-    query="key ~ 'AS_%'",
+    space_key="NOVA",
+    query="key ~ 'REQ_%'",
     limit=50
 )
 
 # Complex search
 results = fetcher.list_requirements(
-    space_key="OCX",
+    space_key="NOVA",
     query="@Category = 'Functional' AND @Priority = 'High' AND NOT (jira ~ '%')",
     limit=100
 )
@@ -336,13 +336,13 @@ results = fetcher.list_requirements(
 # Response structure
 {
     "results": [
-        {"key": "AS_001", "status": "ACTIVE", ...},
-        {"key": "AS_002", "status": "ACTIVE", ...}
+        {"key": "REQ_001", "status": "ACTIVE", ...},
+        {"key": "REQ_002", "status": "ACTIVE", ...}
     ],
     "count": 150,  # Total matching requirements
     "limit": 100,   # Page size
     "offset": 0,    # Starting position
-    "explanation": "Requirements with key starting with 'AS_' and with status 'ACTIVE'",
+    "explanation": "Requirements with key starting with 'REQ_' and with status 'ACTIVE'",
     "aoSql": "SELECT * FROM ..."  # Internal SQL query
 }
 ```
@@ -352,23 +352,23 @@ results = fetcher.list_requirements(
 When working with an AI agent through MCP:
 
 ```
-Agent: "Find all functional requirements in OCX space"
-Tool: search_requirements(space_key="OCX", query="@Category = 'Functional'")
+Agent: "Find all functional requirements in NOVA space"
+Tool: search_requirements(space_key="NOVA", query="@Category = 'Functional'")
 
-Agent: "Show AS requirements linked to OCX-11076"
-Tool: search_requirements(space_key="OCX", query="key ~ 'AS_%' AND jira = 'OCX-11076'")
+Agent: "Show AS requirements linked to NOVA-11076"
+Tool: search_requirements(space_key="NOVA", query="key ~ 'REQ_%' AND jira = 'NOVA-11076'")
 
 Agent: "Find high priority requirements without JIRA links"
-Tool: search_requirements(space_key="OCX", query="@Priority = 'High' AND NOT (jira ~ '%')")
+Tool: search_requirements(space_key="NOVA", query="@Priority = 'High' AND NOT (jira ~ '%')")
 
-Agent: "List requirements that reference AS_001"
-Tool: search_requirements(space_key="OCX", query="FROM = 'AS_001'")
+Agent: "List requirements that reference REQ_001"
+Tool: search_requirements(space_key="NOVA", query="FROM = 'REQ_001'")
 ```
 
 ## Performance Tips
 
 1. **Add space context**: Always specify `space_key` - cross-space searches are slower
-2. **Use specific key patterns**: `key ~ 'AS_%'` is faster than `text ~ '%AS%'`
+2. **Use specific key patterns**: `key ~ 'REQ_%'` is faster than `text ~ '%AS%'`
 3. **Limit result sets**: Use reasonable `limit` values (default: 50, max: 200)
 4. **Filter by status**: Default is `ACTIVE` - explicit filtering helps performance
 5. **Use indexed fields**: `key`, `status`, `jira` are indexed and faster than text search
@@ -405,19 +405,19 @@ Tool: search_requirements(space_key="OCX", query="FROM = 'AS_001'")
 
 ## Examples from BR Automation
 
-Based on the OCX space structure:
+Based on the NOVA space structure:
 
 ```
 # Find all AS (Architecture Specification) requirements
-key ~ 'AS_%'
+key ~ 'REQ_%'
 
 # Find requirements about command line interface
 text ~ '%command line%'
 
 # Find requirements related to export functionality
-text ~ '%export%' AND key ~ 'AS_%'
+text ~ '%export%' AND key ~ 'REQ_%'
 
-# Find requirements on the OCX-11076 requirements page
+# Find requirements on the NOVA-11076 requirements page
 page = 504827048
 
 # Find requirements without proper categorization

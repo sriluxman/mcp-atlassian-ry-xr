@@ -1,8 +1,18 @@
-# MCP Atlassian
+# MCP Atlassian — Requirements Yogi fork
 
-![PyPI Version](https://img.shields.io/pypi/v/mcp-atlassian)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/mcp-atlassian)
-![PePy - Total Downloads](https://static.pepy.tech/personalized-badge/mcp-atlassian?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Total%20Downloads)
+> **Fork of [sooperset/mcp-atlassian](https://github.com/sooperset/mcp-atlassian)**
+>
+> This fork adds [Requirements Yogi](https://www.requirementsyogi.com/) integration on top of the
+> upstream MCP Atlassian server. Requirements Yogi is a niche Confluence plugin used for formal
+> requirements management, and its integration is too specialised for the mainstream project.
+> Contributing this back upstream remains questionable — hence the separate fork.
+>
+> All credit for the core Jira and Confluence tooling goes to the
+> [original authors](https://github.com/sooperset/mcp-atlassian/graphs/contributors).
+
+![PyPI Version](https://img.shields.io/pypi/v/mcp-atlassian-ry)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/mcp-atlassian-ry)
+![PePy - Total Downloads](https://static.pepy.tech/personalized-badge/mcp-atlassian-ry?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Total%20Downloads)
 [![Run Tests](https://github.com/sriluxman/mcp-atlassian-ry-xr/actions/workflows/tests.yml/badge.svg)](https://github.com/sriluxman/mcp-atlassian-ry-xr/actions/workflows/tests.yml)
 ![License](https://img.shields.io/github/license/sooperset/mcp-atlassian)
 [![Docs](https://img.shields.io/badge/docs-github--pages-blue)](https://sriluxman.github.io/mcp-atlassian-ry-xr)

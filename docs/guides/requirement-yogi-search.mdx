@@ -14,13 +14,13 @@ Requirements Yogi tools are available in this fork of MCP Atlassian. The `requir
 key = 'REQ-001'
 
 # Wildcard by prefix
-key ~ 'AS_%'
+key ~ 'REQ_%'
 
 # Property filter
 @Category = 'Functional'
 
 # Combined filters
-key ~ 'AS_%' AND @Priority = 'High' AND NOT (jira ~ '%')
+key ~ 'REQ_%' AND @Priority = 'High' AND NOT (jira ~ '%')
 ```
 
 ## Operators
@@ -29,10 +29,10 @@ key ~ 'AS_%' AND @Priority = 'High' AND NOT (jira ~ '%')
 |----------|-------------|---------|
 | `=` or `==` | Exact equality | `key = 'REQ-001'` |
 | `~` | Soft equality with `%` wildcards | `key ~ 'REQ-%'` |
-| `AND` | Both conditions must match | `key ~ 'AS_%' AND @Priority = 'High'` |
+| `AND` | Both conditions must match | `key ~ 'REQ_%' AND @Priority = 'High'` |
 | `OR` | Either condition matches | `@Category = 'Functional' OR @Category = 'Security'` |
 | `NOT` | Negation | `NOT (jira ~ '%')` |
-| `()` | Grouping | `(key ~ 'AS_%' OR key ~ 'BS_%') AND @Priority = 'High'` |
+| `()` | Grouping | `(key ~ 'REQ_%' OR key ~ 'SYS_%') AND @Priority = 'High'` |
 | `IS NULL` | Field has no value | `@Owner IS NULL` |
 | `IS NOT NULL` | Field has a value | `baseline IS NOT NULL` |
 
@@ -42,8 +42,8 @@ key ~ 'AS_%' AND @Priority = 'High' AND NOT (jira ~ '%')
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| `key` | Requirement key | `key = 'AS_001'` or `key ~ 'AS_%'` |
-| `spaceKey` | Confluence space key (case-sensitive) | `spaceKey = 'OCX'` |
+| `key` | Requirement key | `key = 'REQ_001'` or `key ~ 'REQ_%'` |
+| `spaceKey` | Confluence space key (case-sensitive) | `spaceKey = 'NOVA'` |
 | `status` | Requirement status | `status = 'ACTIVE'` (default), `'DELETED'`, `'MOVED'` |
 | `text` | Requirement content (excludes properties) | `text ~ '%authentication%'` |
 | `page` | Page ID where requirement is defined | `page = 467382` |
@@ -54,12 +54,12 @@ key ~ 'AS_%' AND @Priority = 'High' AND NOT (jira ~ '%')
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| `jira` | Linked Jira issue key | `jira = 'OCX-11076'` |
-| `jira@relationship` | Jira issue with a specific relationship type | `jira@implements = 'OCX-11076'` |
+| `jira` | Linked Jira issue key | `jira = 'NOVA-11076'` |
+| `jira@relationship` | Jira issue with a specific relationship type | `jira@implements = 'NOVA-11076'` |
 
 ```
 # Linked to a specific issue
-jira = 'OCX-11076'
+jira = 'NOVA-11076'
 
 # Specific relationship
 jira@implements = 'PROJ-123'
@@ -148,10 +148,10 @@ baseline = 4 AND baseline was 3
     key = 'REQ-001'
 
     # Starts with prefix
-    key ~ 'AS_%'
+    key ~ 'REQ_%'
 
     # Multiple prefixes
-    key ~ 'AS_%' OR key ~ 'BS_%'
+    key ~ 'REQ_%' OR key ~ 'SYS_%'
     ```
   </Tab>
   <Tab title="By Property">
@@ -172,7 +172,7 @@ baseline = 4 AND baseline was 3
   <Tab title="By Jira">
     ```
     # Linked to specific issue
-    jira = 'OCX-11076'
+    jira = 'NOVA-11076'
 
     # Any Jira link
     jira ~ '%'
@@ -181,7 +181,7 @@ baseline = 4 AND baseline was 3
     NOT (jira ~ '%')
 
     # Specific relationship
-    jira@implements = 'OCX-11076'
+    jira@implements = 'NOVA-11076'
     ```
   </Tab>
   <Tab title="By Dependencies">
@@ -205,7 +205,7 @@ baseline = 4 AND baseline was 3
 
 ```
 # High-priority functional requirements in AS group
-key ~ 'AS_%' AND @Category = 'Functional' AND @Priority = 'High'
+key ~ 'REQ_%' AND @Category = 'Functional' AND @Priority = 'High'
 
 # Linked to Jira but not yet implemented
 jira ~ '%' AND NOT (jira@implements ~ '%')
@@ -223,7 +223,7 @@ page = 467382 AND @Category = 'Functional'
 ## Performance Tips
 
 1. **Always specify `space_key`** — cross-space searches are slower
-2. **Prefer key patterns over text** — `key ~ 'AS_%'` is faster than `text ~ '%AS%'`
+2. **Prefer key patterns over text** — `key ~ 'REQ_%'` is faster than `text ~ '%AS%'`
 3. **Use reasonable `limit` values** — default 50, max 200
 4. **Filter by status explicitly** — default is `ACTIVE`; explicit filtering helps the planner
 5. **Use indexed fields first** — `key`, `status`, `jira` are indexed; `text` is a full-scan

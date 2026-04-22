@@ -262,13 +262,13 @@ Requirements Yogi reuses Confluence authentication automatically — no addition
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `REQUIREMENT_YOGI_SPACES_FILTER` | Limit access to specific Confluence spaces | `TYS,OCX,DEV` |
+| `REQUIREMENT_YOGI_SPACES_FILTER` | Limit access to specific Confluence spaces | `LUNA,NOVA,DEV` |
 
 When set, only requirements from the listed space keys are accessible. This is independent of `CONFLUENCE_SPACES_FILTER`.
 
 ```bash
 # Allow Requirements Yogi access only in these spaces
-REQUIREMENT_YOGI_SPACES_FILTER=TYS,OCX,DEV
+REQUIREMENT_YOGI_SPACES_FILTER=LUNA,NOVA,DEV
 ```
 
 ### Enabling Requirements Yogi Tools

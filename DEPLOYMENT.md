@@ -47,7 +47,7 @@ This guide explains how to deploy the MCP Atlassian server to another machine fo
 
 2. **Create `.env` file with your credentials:**
    ```env
-   CONFLUENCE_URL=https://confluence.br-automation.com
+   CONFLUENCE_URL=https://confluence.example-corp.com
    CONFLUENCE_USERNAME=your.email@company.com
    CONFLUENCE_PERSONAL_TOKEN=your_token_here
    ```
