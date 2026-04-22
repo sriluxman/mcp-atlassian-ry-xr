@@ -38,14 +38,24 @@ Go to https://id.atlassian.com/manage-profile/security/api-tokens and create a t
 
 ### 2. Configure Your IDE
 
+> **Package vs command name** — This fork is published as `mcp-atlassian-ry` on PyPI, but the
+> CLI command (inherited from upstream) is still `mcp-atlassian`. Use `--from` to be explicit
+> about which package you are running:
+> ```
+> uvx --from mcp-atlassian-ry mcp-atlassian
+> ```
+
 Add to your Claude Desktop or Cursor MCP configuration:
 
 ```json
 {
   "mcpServers": {
-    "mcp-atlassian": {
+    "mcp-atlassian-ry": {
       "command": "uvx",
-      "args": ["mcp-atlassian"],
+      "args": [
+        "--from", "mcp-atlassian-ry",
+        "mcp-atlassian"
+      ],
       "env": {
         "JIRA_URL": "https://your-company.atlassian.net",
         "JIRA_USERNAME": "your.email@company.com",

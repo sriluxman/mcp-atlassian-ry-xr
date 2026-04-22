@@ -5,6 +5,12 @@ description: "Configure MCP Atlassian for Claude Desktop, Cursor, Windsurf, and 
 
 This guide covers IDE integration, environment variables, and advanced configuration options.
 
+<Note>
+**Installing this fork** — use `pip install mcp-atlassian-ry` or
+`uvx --from mcp-atlassian-ry mcp-atlassian`. The CLI command is `mcp-atlassian` (same as
+upstream) — the `--from` flag makes clear you are running this fork and not the upstream package.
+</Note>
+
 ## IDE Integration
 
 ### Configuration File Locations
@@ -21,9 +27,12 @@ This guide covers IDE integration, environment variables, and advanced configura
 ```json
 {
   "mcpServers": {
-    "mcp-atlassian": {
+    "mcp-atlassian-ry": {
       "command": "uvx",
-      "args": ["mcp-atlassian"],
+      "args": [
+        "--from", "mcp-atlassian-ry",
+        "mcp-atlassian"
+      ],
       "env": {
         "JIRA_URL": "https://your-company.atlassian.net",
         "JIRA_USERNAME": "your.email@company.com",

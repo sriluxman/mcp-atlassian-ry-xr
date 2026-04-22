@@ -56,16 +56,19 @@ This guide explains how to deploy the MCP Atlassian server to another machine fo
 
 ## Option 2: Using PyPI (If Published)
 
-If you publish to your company's private PyPI or public PyPI:
+The package is published on PyPI as `mcp-atlassian-ry`. Use `--from` to explicitly target this
+fork (the CLI command is `mcp-atlassian`, inherited from upstream):
 
 **mcp.json:**
 ```json
 {
     "servers": {
-        "mcp-atlassian": {
+        "mcp-atlassian-ry": {
             "type": "stdio",
             "command": "uvx",
             "args": [
+                "--from",
+                "mcp-atlassian-ry",
                 "mcp-atlassian",
                 "--env-file",
                 ".env"
