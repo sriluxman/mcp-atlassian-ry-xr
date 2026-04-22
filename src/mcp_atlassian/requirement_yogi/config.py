@@ -19,7 +19,9 @@ class RequirementYogiConfig:
     """
 
     confluence_url: str  # Base URL for Confluence instance
-    auth_type: Literal["basic", "pat"]  # Authentication type (OAuth not directly supported by Yogi)
+    auth_type: Literal[
+        "basic", "pat"
+    ]  # Authentication type (OAuth not directly supported by Yogi)
     username: str | None = None  # Email or username (for basic auth)
     api_token: str | None = None  # API token (for basic auth)
     personal_token: str | None = None  # Personal access token (Server/DC)
@@ -82,7 +84,9 @@ class RequirementYogiConfig:
         # Determine authentication type
         if personal_token:
             auth_type = "pat"
-            logger.debug("Using Personal Access Token authentication for Requirements Yogi")
+            logger.debug(
+                "Using Personal Access Token authentication for Requirements Yogi"
+            )
         elif username and api_token:
             auth_type = "basic"
             logger.debug("Using Basic authentication for Requirements Yogi")

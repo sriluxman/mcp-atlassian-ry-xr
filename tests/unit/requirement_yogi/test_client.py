@@ -21,10 +21,9 @@ class TestRequirementYogiClientInit:
             personal_token="test_pat_token",
         )
 
-        with patch(
-            "mcp_atlassian.requirement_yogi.client.Session"
-        ) as mock_session_cls, patch(
-            "mcp_atlassian.requirement_yogi.client.configure_ssl_verification"
+        with (
+            patch("mcp_atlassian.requirement_yogi.client.Session") as mock_session_cls,
+            patch("mcp_atlassian.requirement_yogi.client.configure_ssl_verification"),
         ):
             mock_session = MagicMock()
             mock_session_cls.return_value = mock_session
@@ -46,10 +45,9 @@ class TestRequirementYogiClientInit:
             api_token="api_token",
         )
 
-        with patch(
-            "mcp_atlassian.requirement_yogi.client.Session"
-        ) as mock_session_cls, patch(
-            "mcp_atlassian.requirement_yogi.client.configure_ssl_verification"
+        with (
+            patch("mcp_atlassian.requirement_yogi.client.Session") as mock_session_cls,
+            patch("mcp_atlassian.requirement_yogi.client.configure_ssl_verification"),
         ):
             mock_session = MagicMock()
             mock_session_cls.return_value = mock_session
@@ -62,12 +60,12 @@ class TestRequirementYogiClientInit:
 
     def test_init_from_env(self):
         """Test initializing client from environment variables."""
-        with patch(
-            "mcp_atlassian.requirement_yogi.config.RequirementYogiConfig.from_env"
-        ) as mock_from_env, patch(
-            "mcp_atlassian.requirement_yogi.client.Session"
-        ), patch(
-            "mcp_atlassian.requirement_yogi.client.configure_ssl_verification"
+        with (
+            patch(
+                "mcp_atlassian.requirement_yogi.config.RequirementYogiConfig.from_env"
+            ) as mock_from_env,
+            patch("mcp_atlassian.requirement_yogi.client.Session"),
+            patch("mcp_atlassian.requirement_yogi.client.configure_ssl_verification"),
         ):
             mock_config = MagicMock(spec=RequirementYogiConfig)
             mock_config.auth_type = "pat"
@@ -96,10 +94,9 @@ class TestRequirementYogiClientInit:
             custom_headers={"X-Custom-Header": "test-value"},
         )
 
-        with patch(
-            "mcp_atlassian.requirement_yogi.client.Session"
-        ) as mock_session_cls, patch(
-            "mcp_atlassian.requirement_yogi.client.configure_ssl_verification"
+        with (
+            patch("mcp_atlassian.requirement_yogi.client.Session") as mock_session_cls,
+            patch("mcp_atlassian.requirement_yogi.client.configure_ssl_verification"),
         ):
             mock_session = MagicMock()
             mock_session_cls.return_value = mock_session
@@ -121,10 +118,9 @@ class TestRequirementYogiClientInit:
             https_proxy="https://proxy:8443",
         )
 
-        with patch(
-            "mcp_atlassian.requirement_yogi.client.Session"
-        ) as mock_session_cls, patch(
-            "mcp_atlassian.requirement_yogi.client.configure_ssl_verification"
+        with (
+            patch("mcp_atlassian.requirement_yogi.client.Session") as mock_session_cls,
+            patch("mcp_atlassian.requirement_yogi.client.configure_ssl_verification"),
         ):
             mock_session = MagicMock()
             mock_session_cls.return_value = mock_session
@@ -150,9 +146,7 @@ class TestRequirementYogiClientRequest:
         assert result == {"key": "test"}
         mock_ry_session.request.assert_called_once()
 
-    def test_request_post_with_json(
-        self, requirement_yogi_client, mock_ry_session
-    ):
+    def test_request_post_with_json(self, requirement_yogi_client, mock_ry_session):
         """Test making a POST request with JSON body."""
         mock_response = mock_ry_session.request.return_value
         mock_response.status_code = 200
@@ -167,9 +161,7 @@ class TestRequirementYogiClientRequest:
         call_args = mock_ry_session.request.call_args
         assert call_args.kwargs["json"] == data
 
-    def test_request_with_params(
-        self, requirement_yogi_client, mock_ry_session
-    ):
+    def test_request_with_params(self, requirement_yogi_client, mock_ry_session):
         """Test making a request with query parameters."""
         mock_response = mock_ry_session.request.return_value
         mock_response.status_code = 200
@@ -214,9 +206,7 @@ class TestRequirementYogiClientRequest:
         with pytest.raises(HTTPError):
             requirement_yogi_client._request("GET", "/test")
 
-    def test_request_empty_response(
-        self, requirement_yogi_client, mock_ry_session
-    ):
+    def test_request_empty_response(self, requirement_yogi_client, mock_ry_session):
         """Test handling of empty response content."""
         mock_response = mock_ry_session.request.return_value
         mock_response.status_code = 204

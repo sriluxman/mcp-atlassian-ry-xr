@@ -16,15 +16,11 @@ import pytest
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from fixtures.requirement_yogi_mocks import (
-    MOCK_CREATE_RESPONSE,
     MOCK_REQUIREMENT_RESPONSE,
-    MOCK_SEARCH_RESPONSE,
-    MOCK_UPDATE_RESPONSE,
 )
 
 from mcp_atlassian.requirement_yogi.config import RequirementYogiConfig
 from mcp_atlassian.requirement_yogi.fetcher import RequirementYogiFetcher
-
 
 # ============================================================================
 # Configuration Fixtures
@@ -117,11 +113,14 @@ def requirement_yogi_client(mock_ry_config, mock_ry_session):
     Returns:
         RequirementYogiFetcher: Configured fetcher with mocked session
     """
-    with patch(
-        "mcp_atlassian.requirement_yogi.client.Session",
-        return_value=mock_ry_session,
-    ), patch(
-        "mcp_atlassian.requirement_yogi.client.configure_ssl_verification",
+    with (
+        patch(
+            "mcp_atlassian.requirement_yogi.client.Session",
+            return_value=mock_ry_session,
+        ),
+        patch(
+            "mcp_atlassian.requirement_yogi.client.configure_ssl_verification",
+        ),
     ):
         fetcher = RequirementYogiFetcher(config=mock_ry_config)
         fetcher.session = mock_ry_session
@@ -140,11 +139,14 @@ def requirement_yogi_client_with_filter(mock_ry_config_with_filter, mock_ry_sess
     Returns:
         RequirementYogiFetcher: Fetcher with spaces filter enabled
     """
-    with patch(
-        "mcp_atlassian.requirement_yogi.client.Session",
-        return_value=mock_ry_session,
-    ), patch(
-        "mcp_atlassian.requirement_yogi.client.configure_ssl_verification",
+    with (
+        patch(
+            "mcp_atlassian.requirement_yogi.client.Session",
+            return_value=mock_ry_session,
+        ),
+        patch(
+            "mcp_atlassian.requirement_yogi.client.configure_ssl_verification",
+        ),
     ):
         fetcher = RequirementYogiFetcher(config=mock_ry_config_with_filter)
         fetcher.session = mock_ry_session

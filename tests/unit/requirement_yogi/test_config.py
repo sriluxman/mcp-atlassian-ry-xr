@@ -64,9 +64,7 @@ class TestRequirementYogiConfigFromEnv:
     def test_from_env_missing_url(self):
         """Test that from_env raises ValueError when URL is missing."""
         with patch.dict(os.environ, {}, clear=True):
-            with pytest.raises(
-                ValueError, match="Missing required CONFLUENCE_URL"
-            ):
+            with pytest.raises(ValueError, match="Missing required CONFLUENCE_URL"):
                 RequirementYogiConfig.from_env()
 
     def test_from_env_missing_auth(self):
@@ -76,9 +74,7 @@ class TestRequirementYogiConfigFromEnv:
             {"CONFLUENCE_URL": "https://confluence.example.com"},
             clear=True,
         ):
-            with pytest.raises(
-                ValueError, match="Missing authentication credentials"
-            ):
+            with pytest.raises(ValueError, match="Missing authentication credentials"):
                 RequirementYogiConfig.from_env()
 
     def test_from_env_with_spaces_filter(self):
@@ -155,10 +151,7 @@ class TestRequirementYogiConfigProperties:
             auth_type="pat",
             personal_token="token",
         )
-        assert (
-            config.full_base_url
-            == "https://confluence.example.com/rest/reqs/1"
-        )
+        assert config.full_base_url == "https://confluence.example.com/rest/reqs/1"
 
     def test_full_base_url_strips_trailing_slash(self):
         """Test that trailing slash in URL is handled."""
@@ -167,10 +160,7 @@ class TestRequirementYogiConfigProperties:
             auth_type="pat",
             personal_token="token",
         )
-        assert (
-            config.full_base_url
-            == "https://confluence.example.com/rest/reqs/1"
-        )
+        assert config.full_base_url == "https://confluence.example.com/rest/reqs/1"
 
     def test_is_auth_configured_pat(self):
         """Test is_auth_configured with PAT."""

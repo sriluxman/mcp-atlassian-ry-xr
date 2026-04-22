@@ -7,8 +7,6 @@ such as storage data, properties, and references.
 import logging
 from typing import Any
 
-from pydantic import Field
-
 from ..base import ApiModel
 from ..constants import EMPTY_STRING
 

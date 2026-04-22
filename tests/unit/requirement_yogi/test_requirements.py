@@ -1,7 +1,5 @@
 """Unit tests for the RequirementsMixin class."""
 
-from unittest.mock import MagicMock, patch
-
 import pytest
 
 from mcp_atlassian.exceptions import MCPAtlassianAuthenticationError
@@ -114,13 +112,9 @@ class TestGetRequirement:
     ):
         """Test that disallowed spaces are rejected by filter."""
         with pytest.raises(ValueError, match="not in the allowed spaces filter"):
-            requirement_yogi_client_with_filter.get_requirement(
-                "BLOCKED", "REQ-001"
-            )
+            requirement_yogi_client_with_filter.get_requirement("BLOCKED", "REQ-001")
 
-    def test_get_requirement_auth_error(
-        self, requirement_yogi_client, mock_ry_session
-    ):
+    def test_get_requirement_auth_error(self, requirement_yogi_client, mock_ry_session):
         """Test handling of authentication errors."""
         mock_response = mock_ry_session.request.return_value
         mock_response.status_code = 401
@@ -167,24 +161,18 @@ class TestListRequirements:
         mock_response = mock_ry_session.request.return_value
         mock_response.json.return_value = MOCK_SEARCH_RESPONSE
 
-        result = requirement_yogi_client.list_requirements(
-            "TYS", query="key ~ 'AS_%'"
-        )
+        result = requirement_yogi_client.list_requirements("TYS", query="key ~ 'AS_%'")
 
         call_args = mock_ry_session.request.call_args
         assert call_args.kwargs["params"]["q"] == "key ~ 'AS_%'"
         assert isinstance(result, RequirementSearchResult)
 
-    def test_list_requirements_invalid_limit_low(
-        self, requirement_yogi_client
-    ):
+    def test_list_requirements_invalid_limit_low(self, requirement_yogi_client):
         """Test that limit < 1 raises ValueError."""
         with pytest.raises(ValueError, match="Limit must be between"):
             requirement_yogi_client.list_requirements("TYS", limit=0)
 
-    def test_list_requirements_invalid_limit_high(
-        self, requirement_yogi_client
-    ):
+    def test_list_requirements_invalid_limit_high(self, requirement_yogi_client):
         """Test that limit > MAX raises ValueError."""
         with pytest.raises(ValueError, match="Limit must be between"):
             requirement_yogi_client.list_requirements(
@@ -208,9 +196,7 @@ class TestListRequirements:
         )
         assert isinstance(result, RequirementSearchResult)
 
-    def test_list_requirements_spaces_filter(
-        self, requirement_yogi_client_with_filter
-    ):
+    def test_list_requirements_spaces_filter(self, requirement_yogi_client_with_filter):
         """Test that spaces filter is applied to list_requirements."""
         with pytest.raises(ValueError, match="not in the allowed spaces filter"):
             requirement_yogi_client_with_filter.list_requirements("BLOCKED")
@@ -248,18 +234,14 @@ class TestCreateRequirement:
         assert "/requirement2/DEV/REQ-NEW-001" in call_args.kwargs["url"]
         assert call_args.kwargs["json"] == data
 
-    def test_create_requirement_missing_title(
-        self, requirement_yogi_client
-    ):
+    def test_create_requirement_missing_title(self, requirement_yogi_client):
         """Test that missing title raises ValueError."""
         with pytest.raises(ValueError, match="title"):
             requirement_yogi_client.create_requirement(
                 "DEV", "REQ-001", {"description": "No title"}
             )
 
-    def test_create_requirement_empty_data(
-        self, requirement_yogi_client
-    ):
+    def test_create_requirement_empty_data(self, requirement_yogi_client):
         """Test that empty data raises ValueError."""
         with pytest.raises(ValueError):
             requirement_yogi_client.create_requirement("DEV", "REQ-001", {})
@@ -345,9 +327,7 @@ class TestDeleteRequirement:
 class TestBulkUpdateRequirements:
     """Tests for RequirementsMixin.bulk_update_requirements()."""
 
-    def test_bulk_update_returns_dict(
-        self, requirement_yogi_client, mock_ry_session
-    ):
+    def test_bulk_update_returns_dict(self, requirement_yogi_client, mock_ry_session):
         """Test that bulk_update returns a dict."""
         mock_response = mock_ry_session.request.return_value
         mock_response.json.return_value = {"updated": 2, "failed": 0}
@@ -368,9 +348,7 @@ class TestBulkUpdateRequirements:
         with pytest.raises(ValueError, match="cannot be empty"):
             requirement_yogi_client.bulk_update_requirements("TYS", [])
 
-    def test_bulk_update_api_call(
-        self, requirement_yogi_client, mock_ry_session
-    ):
+    def test_bulk_update_api_call(self, requirement_yogi_client, mock_ry_session):
         """Test that PUT is made to space endpoint."""
         mock_response = mock_ry_session.request.return_value
         mock_response.json.return_value = {"updated": 1, "failed": 0}
@@ -407,9 +385,7 @@ class TestSpacesFilter:
         """Test that unconfigured spaces are blocked."""
         for space in ["BLOCKED", "OTHER", "RANDOM"]:
             with pytest.raises(ValueError, match="not in the allowed spaces"):
-                requirement_yogi_client_with_filter.get_requirement(
-                    space, "REQ-001"
-                )
+                requirement_yogi_client_with_filter.get_requirement(space, "REQ-001")
 
     def test_no_filter_allows_all_spaces(
         self, requirement_yogi_client, mock_ry_session

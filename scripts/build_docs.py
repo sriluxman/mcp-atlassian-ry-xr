@@ -9,8 +9,8 @@ Handles:
   - Strips .mdx frontmatter quirks
 """
 
-import re
 import os
+import re
 import shutil
 from pathlib import Path
 
@@ -75,7 +75,9 @@ def _convert_cards(text: str) -> str:
     # Fallback: cards with href before title
     text = re.sub(
         r'<Card\s[^>]*href="([^"]*)"[^>]*title="([^"]*)"[^>]*>\s*(.*?)\s*</Card>',
-        lambda m: f'- **[{m.group(2)}]({re.sub(r"^/docs/", "", m.group(1)) + ".md"})** — {m.group(3).strip()}\n',
+        lambda m: (
+            f"- **[{m.group(2)}]({re.sub(r'^/docs/', '', m.group(1)) + '.md'})** — {m.group(3).strip()}\n"
+        ),
         text,
         flags=re.DOTALL,
     )

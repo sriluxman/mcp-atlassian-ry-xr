@@ -19,10 +19,8 @@ ENDPOINTS = {
     "update_requirement": "/requirement2/{spaceKey}/{key}",
     "delete_requirement": "/requirement2/{spaceKey}/{key}",
     "bulk_update_requirements": "/requirement2/{spaceKey}",
-    
     # RequirementResource3 (Bulk operations)
     "bulk_get_requirements": "/requirement3/request",
-    
     # BaselineResource (Public API)
     "list_baselines": "/baseline/{spaceKey}",
     "get_baseline": "/baseline/{spaceKey}/{version}",

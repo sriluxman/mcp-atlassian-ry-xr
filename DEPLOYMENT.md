@@ -13,7 +13,7 @@ This guide explains how to deploy the MCP Atlassian server to another machine fo
    cd mcp-atlassian-main
    uv build
    ```
-   
+
    This creates:
    - `dist/mcp_atlassian-0.0.0-py3-none-any.whl`
    - `dist/mcp_atlassian-0.0.0.tar.gz`

@@ -64,15 +64,11 @@ class RequirementsMixin(RequirementYogiClient):
         self._apply_spaces_filter(space_key)
 
         endpoint = f"/requirement2/{space_key}/{requirement_key}"
-        logger.info(
-            f"Getting requirement: space={space_key}, key={requirement_key}"
-        )
+        logger.info(f"Getting requirement: space={space_key}, key={requirement_key}")
 
         result = self._request(HTTP_GET, endpoint)
         data = result if isinstance(result, dict) else {}
-        return Requirement.from_api_response(
-            data, preprocessor=self._preprocessor
-        )
+        return Requirement.from_api_response(data, preprocessor=self._preprocessor)
 
     def list_requirements(
         self,
@@ -121,7 +117,7 @@ class RequirementsMixin(RequirementYogiClient):
 
         endpoint = f"/requirement2/{space_key}"
         params: dict[str, Any] = {"limit": limit}
-        
+
         # Add search query if provided
         if query:
             params["q"] = query
@@ -129,9 +125,7 @@ class RequirementsMixin(RequirementYogiClient):
                 f"Searching requirements: space={space_key}, query={query}, limit={limit}"
             )
         else:
-            logger.info(
-                f"Listing requirements: space={space_key}, limit={limit}"
-            )
+            logger.info(f"Listing requirements: space={space_key}, limit={limit}")
 
         result = self._request(HTTP_GET, endpoint, params=params)
 
@@ -140,13 +134,17 @@ class RequirementsMixin(RequirementYogiClient):
             return RequirementSearchResult.from_api_response(
                 result, preprocessor=self._preprocessor
             )
-        
+
         # Fallback for unexpected response format
         logger.warning(
             f"Unexpected response structure from list_requirements: {type(result)}"
         )
         fallback_data = {
-            "results": result if isinstance(result, list) else [result] if result else [],
+            "results": result
+            if isinstance(result, list)
+            else [result]
+            if result
+            else [],
             "count": len(result) if isinstance(result, list) else (1 if result else 0),
             "limit": limit,
             "offset": 0,
@@ -241,9 +239,7 @@ class RequirementsMixin(RequirementYogiClient):
         self._apply_spaces_filter(space_key)
 
         endpoint = f"/requirement2/{space_key}/{requirement_key}"
-        logger.info(
-            f"Updating requirement: space={space_key}, key={requirement_key}"
-        )
+        logger.info(f"Updating requirement: space={space_key}, key={requirement_key}")
 
         result = self._request(HTTP_PUT, endpoint, json_data=data)
         response_data = result if isinstance(result, dict) else {}
@@ -280,9 +276,7 @@ class RequirementsMixin(RequirementYogiClient):
         self._apply_spaces_filter(space_key)
 
         endpoint = f"/requirement2/{space_key}/{requirement_key}"
-        logger.info(
-            f"Deleting requirement: space={space_key}, key={requirement_key}"
-        )
+        logger.info(f"Deleting requirement: space={space_key}, key={requirement_key}")
 
         result = self._request(HTTP_DELETE, endpoint)
         return result if isinstance(result, dict) else {}
@@ -331,5 +325,7 @@ class RequirementsMixin(RequirementYogiClient):
             f"count={len(requirements_data)}"
         )
 
-        result = self._request(HTTP_PUT, endpoint, json_data={"requirements": requirements_data})
+        result = self._request(
+            HTTP_PUT, endpoint, json_data={"requirements": requirements_data}
+        )
         return result if isinstance(result, dict) else {}

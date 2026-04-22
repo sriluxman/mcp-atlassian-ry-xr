@@ -7,10 +7,9 @@ from requests import Session
 from requests.exceptions import HTTPError
 
 from ..exceptions import MCPAtlassianAuthenticationError
-from ..utils.logging import get_masked_session_headers, log_config_param, mask_sensitive
+from ..utils.logging import get_masked_session_headers, mask_sensitive
 from ..utils.ssl import configure_ssl_verification
 from .config import RequirementYogiConfig
-from .constants import API_BASE_PATH
 
 logger = logging.getLogger("mcp-atlassian")
 
@@ -44,9 +43,9 @@ class RequirementYogiClient:
                 f"URL: {self.config.confluence_url}, "
                 f"Token (masked): {mask_sensitive(str(self.config.personal_token))}"
             )
-            self.session.headers.update({
-                "Authorization": f"Bearer {self.config.personal_token}"
-            })
+            self.session.headers.update(
+                {"Authorization": f"Bearer {self.config.personal_token}"}
+            )
         else:  # basic auth
             logger.debug(
                 f"Initializing Requirements Yogi client with Basic auth. "
@@ -57,10 +56,12 @@ class RequirementYogiClient:
             self.session.auth = (self.config.username, self.config.api_token)
 
         # Standard headers for JSON API
-        self.session.headers.update({
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        })
+        self.session.headers.update(
+            {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
+        )
 
         # Add custom headers if provided
         if self.config.custom_headers:

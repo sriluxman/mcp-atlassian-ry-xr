@@ -7,7 +7,6 @@ from typing import Annotated
 from fastmcp import Context, FastMCP
 from pydantic import Field
 
-from mcp_atlassian.requirement_yogi import RequirementYogiFetcher
 from mcp_atlassian.requirement_yogi.constants import (
     DEFAULT_REQUIREMENTS_LIMIT,
     MAX_REQUIREMENTS_LIMIT,
@@ -184,31 +183,31 @@ async def search_requirements(
         - limit/offset: Pagination info
 
     Common Query Patterns:
-        
+
         Filter by Product property:
             query = "@Product = 'OpcUaCs'"
-        
+
         Filter by multiple properties:
             query = "@Product = 'AS' AND @Category = 'Functional'"
-        
+
         Find requirements with specific key pattern:
             query = "key ~ 'PRD_%'"
-        
+
         Find requirements by status:
             query = "@Status = 'DRAFT'"
-        
+
         Find requirements linked to JIRA:
             query = "jira = 'OCX-11076'"
-        
+
         Find requirements NOT linked to JIRA:
             query = "NOT (jira ~ '%')"
-        
+
         Complex boolean query:
             query = "(@Product = 'OpcUaCs' OR @Product = 'AS') AND @Type = 'SYSTEM'"
-        
+
         Search in text content:
             query = "text ~ '%installation%'"
-        
+
         Find requirements with empty property:
             query = "@Owner IS NULL"
 
@@ -235,9 +234,7 @@ async def create_requirement(
     ctx: Context,
     space_key: Annotated[
         str,
-        Field(
-            description="Confluence space key where the requirement will be created"
-        ),
+        Field(description="Confluence space key where the requirement will be created"),
     ],
     requirement_key: Annotated[
         str,
@@ -305,9 +302,7 @@ async def update_requirement(
     ctx: Context,
     space_key: Annotated[
         str,
-        Field(
-            description="Confluence space key where the requirement exists"
-        ),
+        Field(description="Confluence space key where the requirement exists"),
     ],
     requirement_key: Annotated[
         str,
@@ -315,11 +310,17 @@ async def update_requirement(
     ],
     title: Annotated[
         str | None,
-        Field(description="New title (optional, leave empty to keep current)", default=None),
+        Field(
+            description="New title (optional, leave empty to keep current)",
+            default=None,
+        ),
     ] = None,
     description: Annotated[
         str | None,
-        Field(description="New description (optional, leave empty to keep current)", default=None),
+        Field(
+            description="New description (optional, leave empty to keep current)",
+            default=None,
+        ),
     ] = None,
     properties: Annotated[
         dict | None,
@@ -379,9 +380,7 @@ async def delete_requirement(
     ctx: Context,
     space_key: Annotated[
         str,
-        Field(
-            description="Confluence space key where the requirement exists"
-        ),
+        Field(description="Confluence space key where the requirement exists"),
     ],
     requirement_key: Annotated[
         str,

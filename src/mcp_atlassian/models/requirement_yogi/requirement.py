@@ -43,9 +43,7 @@ class Requirement(ApiModel):
     content_markdown: str | None = None  # Preprocessed markdown content
 
     @classmethod
-    def from_api_response(
-        cls, data: dict[str, Any], **kwargs: Any
-    ) -> "Requirement":
+    def from_api_response(cls, data: dict[str, Any], **kwargs: Any) -> "Requirement":
         """
         Create a Requirement from a Requirements Yogi API response.
 
@@ -140,15 +138,11 @@ class Requirement(ApiModel):
 
         # Add properties as a flat key-value map for easy consumption
         if self.properties:
-            result["properties"] = {
-                prop.key: prop.value for prop in self.properties
-            }
+            result["properties"] = {prop.key: prop.value for prop in self.properties}
 
         # Add references
         if self.references:
-            result["references"] = [
-                ref.to_simplified_dict() for ref in self.references
-            ]
+            result["references"] = [ref.to_simplified_dict() for ref in self.references]
 
         # Add JIRA links
         if self.jira_links:
