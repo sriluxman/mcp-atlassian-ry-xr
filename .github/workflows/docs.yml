@@ -1,4 +1,6 @@
 name: Deploy Documentation
+# Deploys MkDocs Material site to GitHub Pages via actions/deploy-pages.
+# Requires: Settings → Pages → Source = "GitHub Actions"
 
 on:
   push:
