@@ -1423,7 +1423,7 @@ cli = [
 ]
 
 [[package]]
-name = "mcp-atlassian"
+name = "mcp-atlassian-ry"
 source = { editable = "." }
 dependencies = [
     { name = "atlassian-python-api" },
