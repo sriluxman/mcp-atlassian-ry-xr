@@ -401,7 +401,7 @@ Tool: search_requirements(space_key="OCX", query="FROM = 'AS_001'")
 
 - [Official Search Syntax Documentation](https://docs.requirementyogi.com/data-center/search-syntax)
 - [Requirements Yogi REST API](https://developer.requirementyogi.com/)
-- [MCP Atlassian Documentation](https://sriluxman.github.io/mcp-atlassian-ry)
+- [MCP Atlassian Documentation](https://sriluxman.github.io/mcp-atlassian-ry-xr)
 
 ## Examples from BR Automation
 

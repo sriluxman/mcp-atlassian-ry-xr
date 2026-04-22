@@ -16,7 +16,7 @@
   },
   "topbarCtaButton": {
     "name": "GitHub",
-    "url": "https://github.com/sooperset/mcp-atlassian"
+    "url": "https://github.com/sriluxman/mcp-atlassian-ry-xr"
   },
   "topbarLinks": [
     {
@@ -25,14 +25,14 @@
     },
     {
       "name": "Releases",
-      "url": "https://github.com/sooperset/mcp-atlassian/releases"
+      "url": "https://github.com/sriluxman/mcp-atlassian-ry-xr/releases"
     }
   ],
   "anchors": [
     {
       "name": "GitHub",
       "icon": "github",
-      "url": "https://github.com/sooperset/mcp-atlassian"
+      "url": "https://github.com/sriluxman/mcp-atlassian-ry-xr"
     },
     {
       "name": "PyPI",
@@ -91,6 +91,13 @@
             ]
           },
           {
+            "group": "Requirements Yogi",
+            "pages": [
+              "docs/tools/requirement-yogi",
+              "docs/guides/requirement-yogi-search"
+            ]
+          },
+          {
             "group": "Advanced",
             "pages": [
               "docs/http-transport",
@@ -110,6 +117,6 @@
     ]
   },
   "footerSocials": {
-    "github": "https://github.com/sooperset/mcp-atlassian"
+    "github": "https://github.com/sriluxman/mcp-atlassian-ry-xr"
   }
 }

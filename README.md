@@ -3,9 +3,9 @@
 ![PyPI Version](https://img.shields.io/pypi/v/mcp-atlassian)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/mcp-atlassian)
 ![PePy - Total Downloads](https://static.pepy.tech/personalized-badge/mcp-atlassian?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Total%20Downloads)
-[![Run Tests](https://github.com/sooperset/mcp-atlassian/actions/workflows/tests.yml/badge.svg)](https://github.com/sooperset/mcp-atlassian/actions/workflows/tests.yml)
+[![Run Tests](https://github.com/sriluxman/mcp-atlassian-ry-xr/actions/workflows/tests.yml/badge.svg)](https://github.com/sriluxman/mcp-atlassian-ry-xr/actions/workflows/tests.yml)
 ![License](https://img.shields.io/github/license/sooperset/mcp-atlassian)
-[![Docs](https://img.shields.io/badge/docs-github--pages-blue)](https://sriluxman.github.io/mcp-atlassian-ry)
+[![Docs](https://img.shields.io/badge/docs-github--pages-blue)](https://sriluxman.github.io/mcp-atlassian-ry-xr)
 
 Model Context Protocol (MCP) server for Atlassian products (Confluence and Jira). Supports both Cloud and Server/Data Center deployments.
 
@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/7fe9c488-ad0c-4876-9b54-120b666bb785
 
 Go to https://id.atlassian.com/manage-profile/security/api-tokens and create a token.
 
-> For Server/Data Center, use a Personal Access Token instead. See [Authentication](https://sriluxman.github.io/mcp-atlassian-ry/authentication).
+> For Server/Data Center, use a Personal Access Token instead. See [Authentication](https://sriluxman.github.io/mcp-atlassian-ry-xr/authentication).
 
 ### 2. Configure Your IDE
 
@@ -49,7 +49,7 @@ Add to your Claude Desktop or Cursor MCP configuration:
 }
 ```
 
-> **Server/Data Center users**: Use `JIRA_PERSONAL_TOKEN` instead of `JIRA_USERNAME` + `JIRA_API_TOKEN`. See [Authentication](https://sriluxman.github.io/mcp-atlassian-ry/authentication) for details.
+> **Server/Data Center users**: Use `JIRA_PERSONAL_TOKEN` instead of `JIRA_USERNAME` + `JIRA_API_TOKEN`. See [Authentication](https://sriluxman.github.io/mcp-atlassian-ry-xr/authentication) for details.
 
 ### 3. Start Using
 
@@ -61,16 +61,16 @@ Ask your AI assistant to:
 
 ## Documentation
 
-Full documentation is available at **[sriluxman.github.io/mcp-atlassian-ry](https://sriluxman.github.io/mcp-atlassian-ry)**.
+Full documentation is available at **[sriluxman.github.io/mcp-atlassian-ry-xr](https://sriluxman.github.io/mcp-atlassian-ry-xr)**.
 
 | Topic | Description |
 |-------|-------------|
-| [Installation](https://sriluxman.github.io/mcp-atlassian-ry/installation) | uvx, Docker, pip, from source |
-| [Authentication](https://sriluxman.github.io/mcp-atlassian-ry/authentication) | API tokens, PAT, OAuth 2.0 |
-| [Configuration](https://sriluxman.github.io/mcp-atlassian-ry/configuration) | IDE setup, environment variables |
-| [HTTP Transport](https://sriluxman.github.io/mcp-atlassian-ry/http-transport) | SSE, streamable-http, multi-user |
-| [Tools Reference](https://sriluxman.github.io/mcp-atlassian-ry/tools-reference) | All Jira & Confluence tools |
-| [Troubleshooting](https://sriluxman.github.io/mcp-atlassian-ry/troubleshooting) | Common issues & debugging |
+| [Installation](https://sriluxman.github.io/mcp-atlassian-ry-xr/installation) | uvx, Docker, pip, from source |
+| [Authentication](https://sriluxman.github.io/mcp-atlassian-ry-xr/authentication) | API tokens, PAT, OAuth 2.0 |
+| [Configuration](https://sriluxman.github.io/mcp-atlassian-ry-xr/configuration) | IDE setup, environment variables |
+| [HTTP Transport](https://sriluxman.github.io/mcp-atlassian-ry-xr/http-transport) | SSE, streamable-http, multi-user |
+| [Tools Reference](https://sriluxman.github.io/mcp-atlassian-ry-xr/tools-reference) | All Jira & Confluence tools |
+| [Troubleshooting](https://sriluxman.github.io/mcp-atlassian-ry-xr/troubleshooting) | Common issues & debugging |
 
 ## Compatibility
 
@@ -91,7 +91,7 @@ Full documentation is available at **[sriluxman.github.io/mcp-atlassian-ry](http
 | `jira_update_issue` - Update issues | `confluence_update_page` - Update pages |
 | `jira_transition_issue` - Change status | `confluence_add_comment` - Add comments |
 
-**72 Jira & Confluence tools** — See [Tools Reference](https://sriluxman.github.io/mcp-atlassian-ry/tools-reference) for the complete list.
+**72 Jira & Confluence tools** — See [Tools Reference](https://sriluxman.github.io/mcp-atlassian-ry-xr/tools-reference) for the complete list.
 
 ## Requirements Yogi Integration
 

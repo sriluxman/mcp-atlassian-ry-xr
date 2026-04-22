@@ -80,3 +80,7 @@ playground/
 
 # Dev docs (local task documents)
 dev/
+
+# MkDocs build artifacts
+site/
+site_src/
